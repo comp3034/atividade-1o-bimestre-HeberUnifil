@@ -20,14 +20,13 @@ class RegisterScreen extends StatelessWidget {
           children: [
             Container(
               height: 120,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.person_add_alt),
-                        iconSize: 104)
-                  ]),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.person_add_alt),
+                    iconSize: 104),
+              ]),
             ),
             LoginFormWidget(),
             Divider(
@@ -80,6 +79,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   RegExp _lower = RegExp(r'[a-z]');
   RegExp _numeric = RegExp(r'[0-9]');
   bool isPasswordObscured = true;
+  bool isConfirmPasswordObscured = true;
+  String _password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +142,11 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 }
                 return null;
               },
+              onChanged: (value) {
+                setState(() {
+                  _password = value;
+                });
+              },
             ),
           ),
           Padding(
@@ -150,10 +156,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               prefixIcon: Icons.lock,
               sufixIcon:
                   isPasswordObscured ? Icons.visibility_off : Icons.visibility,
-              obscureText: isPasswordObscured,
+              obscureText: isConfirmPasswordObscured,
               suffixIconOnPressed: () {
                 setState(() {
-                  isPasswordObscured = !isPasswordObscured;
+                  isConfirmPasswordObscured = !isConfirmPasswordObscured;
                 });
               },
               validator: (value) {
@@ -168,6 +174,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 }
                 if (value != null && !value.contains(_numeric)) {
                   return 'A senha deve conter pelo menos um caractere numerico.';
+                }
+                if (value != _password) {
+                  return 'A senha e a confirmação de senha devem ser iguais.';
                 }
                 return null;
               },
